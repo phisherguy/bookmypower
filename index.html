@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form with Firebase</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .card {
+            padding: 20px;
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h5>Contact Form</h5>
+        <form id="contactForm">
+            <div class="input-field">
+                <input type="text" id="name" required>
+                <label for="name">Name</label>
+                <span class="helper-text" id="nameError" style="color: red;"></span>
+            </div>
+            <div class="input-field">
+                <input type="email" id="email" required>
+                <label for="email">Email</label>
+                <span class="helper-text" id="emailError" style="color: red;"></span>
+            </div>
+            <div class="input-field">
+                <input type="tel" id="phone" pattern="^\d{10}$" required>
+                <label for="phone">Phone (10 digits)</label>
+                <span class="helper-text" id="phoneError" style="color: red;"></span>
+            </div>
+            <button type="submit" class="btn">Submit</button>
+            <button type="button" id="downloadBtn" class="btn">Download Records</button>
+        </form>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, push, get, serverTimestamp  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+        import * as XLSX from "https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2ox3vtl4OVCynLfqsM2FG_jP-0oWySpk",
+            authDomain: "bookmypower-6c5aa.firebaseapp.com",
+            projectId: "bookmypower-6c5aa",
+            storageBucket: "bookmypower-6c5aa.appspot.com",
+            messagingSenderId: "485944339213",
+            appId: "1:485944339213:web:b70f9ca29bb03e96775e44",
+            measurementId: "G-G7MCZ16XKG",
+            databaseURL: "https://bookmypower-6c5aa-default-rtdb.asia-southeast1.firebasedatabase.app",
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Form validation
+        function validateForm() {
+            let isValid = true;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            // Name validation
+            if (!name) {
+                document.getElementById('nameError').textContent = 'Name is required.';
+                isValid = false;
+            } else {
+                document.getElementById('nameError').textContent = '';
+            }
+
+            // Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Invalid email format.';
+                isValid = false;
+            } else {
+                document.getElementById('emailError').textContent = '';
+            }
+
+            // Phone validation
+            const phonePattern = /^\d{10}$/;
+            if (!phonePattern.test(phone)) {
+                document.getElementById('phoneError').textContent = 'Phone must be 10 digits.';
+                isValid = false;
+            } else {
+                document.getElementById('phoneError').textContent = '';
+            }
+
+            return isValid;
+        }
+
+        // Submit form
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (validateForm()) {
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const entry = {
+                    name,
+                    email,
+                    phone,
+                    timestamp: serverTimestamp() // Use server timestamp
+                };
+                try {
+                    await push(ref(database, `submissions/`), entry);
+                    alert('Data submitted successfully!');
+                    document.getElementById('contactForm').reset();
+                } catch (error) {
+                    console.error('Error writing to database:', error);
+                }
+            }
+        });
+
+        
+        document.getElementById('downloadBtn').addEventListener('click', async function() {
+    const dbRef = ref(database, 'submissions');
+    try {
+        const snapshot = await get(dbRef);
+        const data = [];
+        snapshot.forEach(childSnapshot => {
+            const record = childSnapshot.val();
+            
+            if (record.timestamp) {
+                        const date = new Date(record.timestamp);
+                        record.timestamp = date.toLocaleString(); // Format to human-readable date
+                    }
+            data.push(record);
+        });
+        console.log(data);
+
+        // Create a worksheet from the data
+        const worksheet = XLSX.utils.json_to_sheet(data);
+
+        // Create a new workbook and add the worksheet
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Submissions');
+
+        // Generate a buffer and download the file
+        XLSX.writeFile(workbook, 'submissions.xlsx');
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+});
+
+
+
+    </script>
+</body>
+</html>
