@@ -1,5 +1,5 @@
 const solarPrices = [
-  96589, 145379, 192598, 244183, 302825, 346934, 408708, 450404, 498957, 539331,
+  88420, 148720, 211120, 264320, 329220, 394120, 459020, 523920, 588820, 653720,
 ];
 const indiaStatesAndDistricts = {
   "Andaman and Nicobar Islands": [
@@ -785,14 +785,6 @@ function performCalculation(solarType, selectedbillorkw, value) {
       result.savings = result.system * 120 * 7;
     }
 
-    result.space = result.system * 80;
-    result.energy = result.system * 120 * 12;
-    result.system = Math.round(result.system);
-    result.energy = Math.round(result.energy);
-    result.space = Math.round(result.space) || 0;
-    result.savings = Math.round(result.savings) * 12 || 0;
-    result.price = solarPrices[result.system - 1] || 0;
-
     if (result.system === 1) {
       result.subsidy = 30000;
     } else if (result.system === 2) {
@@ -808,17 +800,24 @@ function performCalculation(solarType, selectedbillorkw, value) {
       result.system = parseFloat(value);
       result.savings = result.system * 120 * 9;
     }
-
-    result.space = result.system * 80;
-    result.energy = result.system * 120 * 12;
-    result.system = Math.round(result.system);
-    result.energy = Math.round(result.energy);
-    result.space = Math.round(result.space) || 0;
-    result.savings = Math.round(result.savings) * 12 || 0;
-    result.price = solarPrices[result.system - 1] || 0;
   }
+  // result.space = result.system * 80;
+  result.energy = result.system * 120 * 12;
+  result.energy = Math.round(result.energy);
+  result.system = Math.round(result.system);
+  result.space = getspace(result.system);
+  result.space = Math.round(result.space) || 0;
+  result.savings = Math.round(result.savings) * 12 || 0;
+  result.price = solarPrices[result.system - 1] || 0;
 
   setOutPut(result);
+}
+
+function getspace(system) {
+  console.log(system);
+  if (!system) return 0;
+  const space = [100, 200, 230, 360, 450, 540, 630, 720, 810, 900];
+  return space[system - 1];
 }
 
 function setOutPut(result) {

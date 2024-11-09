@@ -5,15 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dropdown and Radio Group Example</title>
     <link rel="stylesheet" href="styles.css" />
+    <!-- Font Awesome CDN -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container">
       <h2>Calculate Your Savings</h2>
+
       <label for="select">Solar Required For:</label>
       <select id="solarTypeId" onchange="loadValues()">
         <option value="home" selected>Home</option>
         <option value="commercial">Commercial</option>
       </select>
+
       <form id="radio-form">
         <label>
           <input
@@ -35,6 +42,7 @@
           System Size (Kw)
         </label>
       </form>
+
       <input
         type="number"
         id="myInput"
@@ -47,36 +55,67 @@
       <!-- Output Cards -->
       <div class="cards">
         <div class="card">
-          <h4>System Output</h4>
-          <p id="systemOP">---</p>
-          <p class="card-label">kW</p>
+          <div class="card-icon">
+            <i class="fas fa-solar-panel"></i>
+          </div>
+          <div class="card-content">
+            <h4>System Output</h4>
+            <p id="systemOP">---</p>
+            <p class="card-label">kW</p>
+          </div>
         </div>
         <div class="card">
-          <h4>Space Needed</h4>
-          <p id="spaceOP">---</p>
-          <p class="card-label">m²</p>
+          <div class="card-icon">
+            <i class="fas fa-home"></i>
+          </div>
+          <div class="card-content">
+            <h4>Space Needed</h4>
+            <p id="spaceOP">---</p>
+            <p class="card-label">sq.ft</p>
+          </div>
         </div>
         <div class="card">
-          <h4>Energy Produced</h4>
-          <p id="energyOP">---</p>
-          <p class="card-label">kWh</p>
+          <div class="card-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div class="card-content">
+            <h4>Energy Produced</h4>
+            <p id="energyOP">---</p>
+            <p class="card-label">kWh</p>
+          </div>
         </div>
         <div class="card">
-          <h4>Savings</h4>
-          <p id="savingsOP">---</p>
-          <p class="card-label">INR</p>
+          <div class="card-icon">
+            <i class="fa-solid fa-piggy-bank"></i>
+          </div>
+          <div class="card-content">
+            <h4>Savings</h4>
+            <p id="savingsOP">---</p>
+            <p class="card-label">INR</p>
+          </div>
         </div>
         <div class="card">
-          <h4>Price</h4>
-          <p id="priceOP">---</p>
-          <p class="card-label">INR</p>
+          <div class="card-icon">
+            <i class="fas fa-tag"></i>
+          </div>
+          <div class="card-content">
+            <h4>Price</h4>
+            <p id="priceOP">---</p>
+            <p class="card-label">INR</p>
+          </div>
         </div>
         <div class="card">
-          <h4>Subsidy</h4>
-          <p id="subsisdyOP">---</p>
-          <p class="card-label">INR</p>
+          <div class="card-icon">
+            <i class="fa-solid fa-hand-holding-dollar"></i>
+          </div>
+          <div class="card-content">
+            <h4>Subsidy</h4>
+            <p id="subsisdyOP">---</p>
+            <p class="card-label">INR</p>
+          </div>
         </div>
       </div>
+
       <!-- Contact Us Button -->
       <button id="contactBtn" class="contact-btn">Contact Us</button>
 
@@ -93,7 +132,6 @@
               placeholder="Enter your full name"
               required
             />
-
             <input
               type="tel"
               id="phone"
@@ -101,7 +139,6 @@
               placeholder="Enter your phone number"
               required
             />
-
             <input
               type="email"
               id="email"
@@ -109,7 +146,6 @@
               placeholder="Enter your email"
               required
             />
-
             <select
               id="stateDD"
               name="stateDD"
@@ -119,7 +155,6 @@
             <select id="districtDropdown" style="display: none" required>
               <option value="">Select District</option>
             </select>
-
             <select id="solarForDD" name="solarForDD" required>
               <option value="">Solar For Home/Business?</option>
               <option value="Villa or Individual House">
@@ -128,7 +163,6 @@
               <option value="Flat or Appartment">Flat or Appartment</option>
               <option value="Business">Business</option>
             </select>
-
             <select id="avgBillDD" name="avgBillDD" required>
               <option value="">Your Monthly Average Bill?</option>
               <option value="Less Than 1,000">Less Than 1,000</option>
@@ -136,7 +170,6 @@
               <option value="2,000 to 5,000">2,000 to 5,000</option>
               <option value="More Than 5,000">More Than 5,000</option>
             </select>
-
             <select id="financeDD" name="financeDD" required>
               <option value="no">Are You Interested in Finance?</option>
               <option value="yes">yes</option>
