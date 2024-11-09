@@ -784,14 +784,6 @@ function performCalculation(solarType, selectedbillorkw, value) {
       result.system = parseFloat(value);
       result.savings = result.system * 120 * 7;
     }
-
-    if (result.system === 1) {
-      result.subsidy = 30000;
-    } else if (result.system === 2) {
-      result.subsidy = 60000;
-    } else if (result.system >= 3 && result.system <= 10) {
-      result.subsidy = 78000;
-    }
   } else {
     if (selectedbillorkw == "bill") {
       result.system = parseInt(value) / 9 / (4 * 30);
@@ -801,6 +793,7 @@ function performCalculation(solarType, selectedbillorkw, value) {
       result.savings = result.system * 120 * 9;
     }
   }
+
   // result.space = result.system * 80;
   result.energy = result.system * 120 * 12;
   result.energy = Math.round(result.energy);
@@ -810,11 +803,20 @@ function performCalculation(solarType, selectedbillorkw, value) {
   result.savings = Math.round(result.savings) * 12 || 0;
   result.price = solarPrices[result.system - 1] || 0;
 
+  if (solarType == "home") {
+    if (result.system === 1) {
+      result.subsidy = 30000;
+    } else if (result.system === 2) {
+      result.subsidy = 60000;
+    } else if (result.system >= 3 && result.system <= 10) {
+      result.subsidy = 78000;
+    }
+  }
+
   setOutPut(result);
 }
 
 function getspace(system) {
-  console.log(system);
   if (!system) return 0;
   const space = [100, 200, 230, 360, 450, 540, 630, 720, 810, 900];
   return space[system - 1];
